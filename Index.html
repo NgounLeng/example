@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kep Sea View Hotel - Luxury Hotel & Skybar in Kep, Cambodia</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Fonts (Poppins and Playfair Display) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Load GSAP (Core) and ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Load Lucide Icons for cleaner UI -->
+    <script type="module" src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Tailwind Configuration */
+        :root {
+            --color-navy: #001f3f;
+            --color-gold: #D4AF37;
+        }
+        
+        /* Apply smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Fonts */
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* Custom Navy and Gold Colors */
+        .bg-navy { background-color: var(--color-navy); }
+        .text-gold { color: var(--color-gold); }
+        .border-gold { border-color: var(--color-gold); }
+        .hover\:text-gold:hover { color: var(--color-gold); transition: color 0.3s ease; }
+        .hover\:bg-gold:hover { background-color: var(--color-gold); transition: background-color 0.3s ease; }
+        .gold-glow { text-shadow: 0 0 5px var(--color-gold), 0 0 10px rgba(212, 175, 55, 0.5); }
+        
+        /* Custom Cursor Style (Micro-Interaction) */
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--color-gold);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+            z-index: 9999;
+            opacity: 0.8;
+            mix-blend-mode: exclusion; /* Creates a cool inverted/glow effect */
+        }
+        .custom-cursor.active {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(212, 175, 55, 0.3);
+            border-color: rgba(255, 255, 255, 0);
+        }
+
+        /* Parallax Container Setup */
+        .parallax-container {
+            overflow: hidden;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="font-poppins text-gray-800 antialiased bg-white overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor hidden md:block"></div>
+
+    <!-- Dynamic Navbar -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-transparent text-white">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="text-white text-2xl font-playfair font-bold tracking-wider hover:gold-glow transition duration-300">Kep Sea View Hotel</a>
+            
+            <!-- Desktop Navigation -->
+            <div class="text-white hidden md:flex space-x-8 text-sm uppercase tracking-widest">
+                <a href="#home" class="nav-link hover:text-gold transition duration-300 border-b-2 border-transparent pb-1">Home</a>
+                <a href="#about" class="nav-link hover:text-gold transition duration-300 border-b-2 border-transparent pb-1">About</a>
+                <a href="#rooms" class="nav-link hover:text-gold transition duration-300 border-b-2 border-transparent pb-1">Rooms</a>
+                <a href="#gallery" class="nav-link hover:text-gold transition duration-300 border-b-2 border-transparent pb-1">Gallery</a>
+                <a href="#blog" class="nav-link hover:text-gold transition duration-300 border-b-2 border-transparent pb-1">Blog</a>
+                <a href="#contact" class="nav-link hover:text-gold transition duration-300 border-b-2 border-transparent pb-1">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </nav>
+
+        <!-- Mobile Menu (Initially Hidden) -->
+        <div id="mobile-menu" class="fixed inset-0 bg-navy text-white transform translate-x-full transition-transform duration-500 md:hidden z-50">
+            <div class="p-6">
+                <button id="close-menu-btn" class="absolute top-4 right-4 p-2">
+                    <i data-lucide="x" class="w-8 h-8"></i>
+                </button>
+                <div class="pt-20 flex flex-col space-y-6 text-xl uppercase tracking-widest font-playfair">
+                    <a href="#home" class="mobile-nav-link p-2 hover:text-gold">Home</a>
+                    <a href="#about" class="mobile-nav-link p-2 hover:text-gold">About the Hotel</a>
+                    <a href="#rooms" class="mobile-nav-link p-2 hover:text-gold">Suites & Rooms</a>
+                    <a href="#gallery" class="mobile-nav-link p-2 hover:text-gold">Photo Gallery</a>
+                    <a href="#blog" class="mobile-nav-link p-2 hover:text-gold">Travel Insights</a>
+                    <a href="#contact" class="mobile-nav-link p-2 hover:text-gold">Reservations</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section - Full Screen Slideshow with Parallax -->
+        <section id="home" class="relative h-screen parallax-container">
+            <div class="h-full w-full bg-cover bg-center transition-opacity duration-1000"
+                 style="background-image: url('https://placehold.co/1600x900/001f3f/D4AF37?text=Kep+Sea+View+Hotel+Ocean+View');"
+                 id="hero-image">
+            </div>
+            
+            <!-- Subtle Image Overlay -->
+            <div class="absolute inset-0 bg-navy bg-opacity-40">
+                <img src="https://images.trvl-media.com/lodging/114000000/113920000/113911000/113910974/6ea7cc05.jpg?impolicy=fcrop&w=1200&h=800&quality=medium" class="**h-full w-full bg-cover bg-center** transition-opacity duration-1000" alt="">
+            </div>
+
+            <!-- Hero Content -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
+                <p class="text-lg md:text-xl uppercase tracking-widest mb-4 opacity-0" id="hero-subtitle">Your Cambodian Coastline Sanctuary</p>
+                <h1 class="font-playfair text-5xl md:text-8xl font-light leading-tight mb-8 opacity-0" id="hero-title">
+                    Kep Sea View Hotel
+                </h1>
+                <a href="#rooms" class="py-3 px-10 text-lg uppercase tracking-wider border-2 border-white text-gold rounded-full 
+                                        transition duration-100 bg-white hover:bg-gold hover:text-white hover:gold-glow opacity-0" 
+                   id="hero-cta">
+                    Discover Suites
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-24 md:py-32 bg-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Text Content -->
+                    <div class="about-content">
+                        <h2 class="font-playfair text-4xl md:text-6xl font-extralight mb-6 text-navy-900 leading-snug">
+                            <span class="text-gold">Elegance</span> Meets The Sea
+                        </h2>
+                        <p class="text-lg text-gray-600 mb-8 max-w-xl">
+                            Perched on the vibrant coast of Kep, our hotel offers an unparalleled blend of modern luxury and serene nature. Experience world-class hospitality, breathtaking sunset views from our Skybar, and direct access to Cambodia's most pristine beaches.
+                        </p>
+                        <ul class="space-y-4 text-gray-700">
+                            <li class="flex items-center space-x-3"><i data-lucide="sun" class="w-5 h-5 text-gold"></i><span>Infinity Pool with Ocean Horizon</span></li>
+                            <li class="flex items-center space-x-3"><i data-lucide="map-pin" class="w-5 h-5 text-gold"></i><span>Prime Location near the Crab Market</span></li>
+                            <li class="flex items-center space-x-3"><i data-lucide="award" class="w-5 h-5 text-gold"></i><span>Five-Star Service Excellence</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Image Cards -->
+                    <div class="grid grid-cols-2 gap-6 about-cards">
+                        <div class="h-64 rounded-xl overflow-hidden shadow-2xl card-item">
+                            <img src="https://lbcdn.airpaz.com/hotelimages/5338002/kep-sea-view-amp-sky-bar-68d943210dd6af409208578bdadd9e1c.jpg" alt="Skybar" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                        </div>
+                        <div class="h-64 rounded-xl overflow-hidden shadow-2xl card-item mt-8">
+                            <img src="https://images.trvl-media.com/lodging/114000000/113920000/113911000/113910974/6aaae1e4.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill" alt="Lobby" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                        </div>
+                        <div class="h-64 rounded-xl overflow-hidden shadow-2xl card-item">
+                            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/660903925.jpg?k=bb526d5a7e63dd3091ed0761009b51c5439beca4dd0bdbbb70c5fff07e407512&o=" alt="Pool" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                        </div>
+                        <div class="h-64 rounded-xl overflow-hidden shadow-2xl card-item mt-8">
+                            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/660893904.jpg?k=61c12d112138abb554fdca3deb7ebdf1bf831b5092b0f297df26cdc1869610f0&o=&hp=1" alt="Beach" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rooms / Suites Section -->
+        <section id="rooms" class="py-24 md:py-32 bg-navy text-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="font-playfair text-center text-4xl md:text-6xl font-extralight mb-16 room-title">
+                    A Collection of <span class="text-gold">Private</span> Retreats
+                </h2>
+
+                <!-- Room Card 1: Ocean Suite -->
+                <div class="grid md:grid-cols-5 gap-8 items-center mb-24 room-card">
+                    <div class="md:col-span-3 h-80 md:h-96 rounded-2xl overflow-hidden shadow-xl">
+                        
+                        <img src="https://z-p3-scontent.fpnh18-3.fna.fbcdn.net/v/t39.30808-6/493945201_1336882341207144_3421442042747710107_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=f727a1&_nc_ohc=fXN2JBzSxM4Q7kNvwFokrto&_nc_oc=AdnXdG15LI9odyvS5skQ-HDbdybbnhB4ca4PbE56c4P7GuGu9ayUVcv32n3hHOJsd4U&_nc_zt=23&_nc_ht=z-p3-scontent.fpnh18-3.fna&_nc_gid=kEfX70zQVQO7J6Z8rdbsGQ&oh=00_Aferu58T_cD2zrv6QzNOk-bqWnmSW9Xp33J2dk00MGyYyA&oe=690BE7BA" alt="Ocean Suite" class="w-full h-full object-cover transition duration-700 hover:scale-105">
+                    </div>
+                    <div class="md:col-span-2 space-y-4">
+                        <p class="uppercase tracking-widest text-sm text-gold">Signature Luxury</p>
+                        <h3 class="font-playfair text-3xl font-light">The Grand Ocean Suite</h3>
+                        <p class="text-gray-300">
+                            Our premier suite features a panoramic balcony, a dedicated lounge area, and a marble bath, offering the most expansive views of the Gulf of Thailand. Pure, unadulterated serenity.
+                        </p>
+                        <div class="flex space-x-4">
+                            <p class="flex items-center text-sm"><i data-lucide="maximize-2" class="w-4 h-4 mr-2 text-gold"></i>120 sqm</p>
+                            <p class="flex items-center text-sm"><i data-lucide="users" class="w-4 h-4 mr-2 text-gold"></i>Max 4 Guests</p>
+                        </div>
+                        <button class="mt-4 py-2 px-6 border-2 border-gold text-gold rounded-full transition duration-300 hover:bg-gold hover:text-navy">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Room Card 2: Seascape Deluxe -->
+                <div class="grid md:grid-cols-5 gap-8 items-center room-card">
+                    <div class="md:col-span-2 md:order-2 space-y-4">
+                        <p class="uppercase tracking-widest text-sm text-gold">Coastal Comfort</p>
+                        <h3 class="font-playfair text-3xl font-light">Seascape Deluxe Room</h3>
+                        <p class="text-gray-300">
+                            A refined and comfortable room designed for relaxation. Enjoy the calming sea breeze and the sounds of the waves from your private, shaded terrace.
+                        </p>
+                        <div class="flex space-x-4">
+                            <p class="flex items-center text-sm"><i data-lucide="maximize-2" class="w-4 h-4 mr-2 text-gold"></i>45 sqm</p>
+                            <p class="flex items-center text-sm"><i data-lucide="users" class="w-4 h-4 mr-2 text-gold"></i>Max 2 Guests</p>
+                        </div>
+                        <button class="mt-4 py-2 px-6 border-2 border-gold text-gold rounded-full transition duration-300 hover:bg-gold hover:text-navy">
+                            View Details
+                        </button>
+                    </div>
+                    <div class="md:col-span-3 md:order-1 h-80 md:h-96 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="https://image-tc.galaxy.tf/wijpeg-dd9ptr0w0ocw0xtp2gdkanh0c/skybrunch-thetop-almarresort-lgbt.jpg?width=1920" alt="Deluxe Room" class="w-full h-full object-cover transition duration-700 hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section - Pinterest/Masonry Style Simulation -->
+        <section id="gallery" class="py-24 md:py-32 bg-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="font-playfair text-center text-4xl md:text-6xl font-extralight mb-16 gallery-title">
+                    The <span class="text-gold">Visual</span> Experience
+                </h2>
+
+                <!-- Grid Layout (Masonry Simulation) -->
+                <div class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+                    <!-- Gallery Item 1 (Tall) -->
+                    <div class="gallery-item overflow-hidden rounded-xl shadow-lg break-inside-avoid-column">
+                        <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/660996792.jpg?k=866b705692d518d18a7e0ac7dec2b29093ad3f559fcf0657b1aa8ecf5db28afe&o=" alt="Skybar Sunset" class="w-full h-auto object-cover transition duration-500 hover:scale-105 cursor-pointer">
+                    </div>
+                    <!-- Gallery Item 2 (Wide) -->
+                    <div class="gallery-item overflow-hidden rounded-xl shadow-lg break-inside-avoid-column">
+                        <img src="https://www.cambodiaacountryfullofcharm.com/wp-content/uploads/2025/04/626fc455-scaled.jpg" alt="Infinity Pool" class="w-full h-auto object-cover transition duration-500 hover:scale-105 cursor-pointer">
+                    </div>
+                    <!-- Gallery Item 3 (Square) -->
+                    <div class="gallery-item overflow-hidden rounded-xl shadow-lg break-inside-avoid-column">
+                        <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/660895974.jpg?k=2a1f9516e64650bc1afa8e02dc8cd7c210472bc4b3bf52e85d54703f00aeb448&o=&hp=1" alt="Hotel Exterior" class="w-full h-auto object-cover transition duration-500 hover:scale-105 cursor-pointer">
+                    </div>
+                    <!-- Gallery Item 4 (Wide) -->
+                    <div class="gallery-item overflow-hidden rounded-xl shadow-lg break-inside-avoid-column">
+                        <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/660893575.jpg?k=f749dec797eac3c1a0c34bd930fabb108fd2054b514508ae138e92d4faeb26ec&o=" alt="Restaurant Interior" class="w-full h-auto object-cover transition duration-500 hover:scale-105 cursor-pointer">
+                    </div>
+                    <!-- Gallery Item 5 (Tall) -->
+                    <div class="gallery-item overflow-hidden rounded-xl shadow-lg break-inside-avoid-column">
+                        <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/660899212.jpg?k=945fd72d49accff77432561fa572aacbea81c696d45688333c54912ff9805011&o=&hp=1" alt="Room Detail" class="w-full h-auto object-cover transition duration-500 hover:scale-105 cursor-pointer">
+                    </div>
+                    <!-- Gallery Item 6 (Square) -->
+                    <div class="gallery-item overflow-hidden rounded-xl shadow-lg break-inside-avoid-column">
+                        <img src="https://images.trvl-media.com/lodging/114000000/113920000/113911000/113910974/6a86579b.jpg?impolicy=fcrop&w=1200&h=800&quality=medium" alt="Beach View" class="w-full h-auto object-cover transition duration-500 hover:scale-105 cursor-pointer">
+                    </div>
+                    <!-- Gallery Item 7 (Wide) -->
+                    <div class="gallery-item overflow-hidden rounded-xl shadow-lg break-inside-avoid-column">
+                        <img src="https://www.cambodiaacountryfullofcharm.com/wp-content/uploads/2025/04/ee66434b-scaled.jpg" alt="Kep View" class="w-full h-auto object-cover transition duration-500 hover:scale-105 cursor-pointer">
+                    </div>
+                    <!-- Gallery Item 8 (Wide) -->
+                    <div class="gallery-item overflow-hidden rounded-xl shadow-lg break-inside-avoid-column">
+                        <img src="https://images.trvl-media.com/lodging/114000000/113920000/113911000/113910974/9c9f167c.jpg?impolicy=fcrop&w=1200&h=800&quality=medium" alt="Kep View" class="w-full h-auto object-cover transition duration-500 hover:scale-105 cursor-pointer">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section (Improved) -->
+        <section id="blog" class="py-24 md:py-32 bg-gray-50 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="font-playfair text-center text-4xl md:text-6xl font-extralight mb-16 blog-title">
+                    Kep Travel <span class="text-gold">Insights</span> & News
+                </h2>
+                
+                <!-- 1. FEATURED ARTICLE (Cinematic, Full-Width Card) -->
+                <div class="blog-hero-card mb-16 bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-3xl hover:translate-y-[-8px]">
+                    <div class="grid md:grid-cols-3">
+                        <div class="md:col-span-2 h-80 md:h-96 relative">
+                            <img src="https://www.asiakingtravel.com/images/thumbs/2024/03/10297/koh-tonsay-guide_1900x700xcrop.webp" alt="Featured Article: Rabbit Island" class="w-full h-full object-cover object-center">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        </div>
+                        <div class="p-8 md:p-12 flex flex-col justify-center">
+                            <p class="text-sm uppercase tracking-widest text-gold mb-3">Featured Excursion</p>
+                            <h3 class="font-playfair text-3xl md:text-4xl font-semibold mb-4 leading-tight">
+                                The Pristine Perfection of Koh Tonsay (Rabbit Island)
+                            </h3>
+                            <p class="text-gray-600 mb-6">
+                                Just a short ferry ride from Kep, discover an untouched paradise where white sands meet gentle, turquoise waves. Our comprehensive guide covers transport, the best snorkeling spots, and how to enjoy a sustainable day trip.
+                            </p>
+                            <a href="#" class="inline-flex items-center text-lg text-gold font-semibold hover:text-navy hover:bg-gold transition duration-300 group">
+                                Read Full Story 
+                                <i data-lucide="arrow-right" class="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. ARTICLE GRID (Staggered, Elegant Cards) -->
+                <div class="grid md:grid-cols-3 gap-8">
+                    
+                    <!-- Grid Card 1 -->
+                    <div class="blog-grid-card bg-white rounded-xl shadow-lg overflow-hidden transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://api.asiavivatravel.com/wp-content/uploads/2024/12/koh-tonsay-768x454.jpg" alt="Kep Crab Market" class="w-full h-full object-cover transition duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <p class="text-xs uppercase tracking-widest text-gold mb-2">Culinary Journey</p>
+                            <h3 class="font-playfair text-xl font-semibold mb-3 leading-snug">
+                                Mastering the Art of the Kep Crab Market
+                            </h3>
+                            <p class="text-gray-600 line-clamp-3 text-sm">
+                                A local's guide to the legendary blue crab: from negotiating the perfect price to finding the best waterfront kitchen for a truly fresh seafood meal.
+                            </p>
+                            <a href="#" class="mt-4 inline-block text-sm text-navy-900 font-semibold hover:text-gold transition duration-300">Explore Now &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Grid Card 2 -->
+                    <div class="blog-grid-card bg-white rounded-xl shadow-lg overflow-hidden transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/1e293b/ffffff?text=Skybar+View+Evening" alt="Skybar Sunset" class="w-full h-full object-cover transition duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <p class="text-xs uppercase tracking-widest text-gold mb-2">Hotel Signature</p>
+                            <h3 class="font-playfair text-xl font-semibold mb-3 leading-snug">
+                                The Sunset Ritual: Cocktails at Our Iconic Skybar
+                            </h3>
+                            <p class="text-gray-600 line-clamp-3 text-sm">
+                                Every evening is a masterpiece. We reveal the secret to capturing the best sunset photos and introduce our signature gold-dust cocktail menu.
+                            </p>
+                            <a href="#" class="mt-4 inline-block text-sm text-navy-900 font-semibold hover:text-gold transition duration-300">View Article &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Grid Card 3 -->
+                    <div class="blog-grid-card bg-white rounded-xl shadow-lg overflow-hidden transition duration-500 hover:shadow-2xl hover:translate-y-[-5px]">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/001f3f/ffffff?text=National+Park+Trail" alt="Kep National Park" class="w-full h-full object-cover transition duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <p class="text-xs uppercase tracking-widest text-gold mb-2">Adventure</p>
+                            <h3 class="font-playfair text-xl font-semibold mb-3 leading-snug">
+                                Hiking the Serene Trails of Kep National Park
+                            </h3>
+                            <p class="text-gray-600 line-clamp-3 text-sm">
+                                Step away from the beach and into the lush greenery. A guide to the best viewpoints, short loops, and wildlife spotting opportunities on the mountain loop.
+                            </p>
+                            <a href="#" class="mt-4 inline-block text-sm text-navy-900 font-semibold hover:text-gold transition duration-300">Discover Now &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact" class="py-24 md:py-32 bg-navy text-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="font-playfair text-center text-4xl md:text-6xl font-extralight mb-16 contact-title">
+                    Get in <span class="text-gold">Touch</span>
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Contact Form & Info -->
+                    <div class="contact-info">
+                        <h3 class="font-playfair text-3xl font-light mb-6">Reservation & Details</h3>
+                        <p class="text-gray-300 mb-8">
+                            We look forward to welcoming you to Kep Sea View Hotel. Contact our concierge team for bespoke booking assistance and general inquiries.
+                        </p>
+
+                        <!-- Contact Details -->
+                        <div class="space-y-6 mb-10">
+                            <div class="flex items-start space-x-4">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-gold flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-semibold">Location</p>
+                                    <p class="text-gray-400">Kep Sea View Hotel, Kep, Cambodia</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-4">
+                                <i data-lucide="mail" class="w-6 h-6 text-gold flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-semibold">Email</p>
+                                    <a href="mailto:beachkep@gmail.com" class="text-gray-400 hover:text-gold transition duration-300">beachkep@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-4">
+                                <i data-lucide="phone" class="w-6 h-6 text-gold flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-semibold">Book Direct</p>
+                                    <p class="text-gray-400">+855 77 636 065 (Mock Number)</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Social/Booking Links -->
+                        <div class="space-y-4">
+                            <h4 class="font-semibold uppercase tracking-wider text-gold">Online Reservations & Connect</h4>
+                            <div class="flex flex-wrap gap-4">
+                                <!-- Booking.com Link -->
+                                <a href="https://www.booking.com/searchresults.html?aid=304142&..." target="_blank" class="flex items-center space-x-2 py-2 px-4 border border-white text-white rounded-full hover:bg-gold hover:text-white transition duration-300">
+                                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                                    <span>Booking.com</span>
+                                </a>
+                                <!-- Telegram Link -->
+                                <a href="https://t.me/KepSeaViewHotelSkybar" target="_blank" class="flex items-center space-x-2 py-2 px-4 border border-white text-white rounded-full hover:border-gold hover:bg-gold transition duration-300">
+                                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                                    <span>Telegram</span>
+                                </a>
+                                <!-- Facebook Link -->
+                                <a href="https://web.facebook.com/KepSeaViewHotel/" target="_blank" class="flex items-center space-x-2 py-2 px-4 border border-white text-white rounded-full hover:border-gold hover:bg-gold transition duration-300">
+                                    <i data-lucide="facebook" class="w-5 h-5"></i>
+                                    <span>Facebook</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Embedded Map (Placeholder) -->
+                    <div class="map-container">
+                        <h3 class="font-playfair text-3xl font-light mb-6">Find Our Location</h3>
+                        <!-- Google Maps Link Simulation -->
+                        <a href="https://maps.app.goo.gl/ti8YrfxdpLDYQiRM7" target="_blank" class="block w-full h-80 rounded-xl overflow-hidden shadow-2xl relative group">
+                            <img src="https://placehold.co/800x480/D4AF37/001f3f?text=Click+to+View+on+Google+Maps" 
+                                 alt="Google Map Location" 
+                                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 opacity-80 group-hover:opacity-100">
+                            <div class="absolute inset-0 flex items-center justify-center bg-navy bg-opacity-30 group-hover:bg-opacity-10 transition duration-300">
+                                <i data-lucide="locate-fixed" class="w-12 h-12 text-gold opacity-90 group-hover:opacity-100 transition duration-300 gold-glow"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="font-playfair text-2xl font-bold text-gold mb-4">Kep Sea View Hotel</p>
+            <p class="text-sm mb-2">&copy; <span id="current-year"></span> Kep Sea View Hotel. All Rights Reserved.</p>
+            <p class="text-xs">Luxury Accommodations | Kep, Cambodia | kepseaviewhotel.com</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- JAVASCRIPT & GSAP ANIMATION LOGIC ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Initialize Lucide Icons
+            lucide.createIcons();
+
+            // --- 1. Custom Cursor Micro-Interaction ---
+            const cursor = document.getElementById('custom-cursor');
+            const interactiveElements = 'a, button, [role="button"], .card-item, .room-card img, .gallery-item img';
+
+            if (cursor) {
+                document.addEventListener('mousemove', (e) => {
+                    gsap.to(cursor, { 
+                        x: e.clientX, 
+                        y: e.clientY, 
+                        duration: 0.1, 
+                        ease: "power2.out" 
+                    });
+                });
+
+                document.querySelectorAll(interactiveElements).forEach(el => {
+                    el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+                    el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+                });
+            }
+
+
+            // --- 2. Dynamic Navbar & Scroll-Based Styling ---
+            const header = document.getElementById('main-header');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            ScrollTrigger.create({
+                start: 'top -50', // Trigger after 50px of scroll
+                onUpdate: (self) => {
+                    if (self.direction === 1) { // Scrolling down
+                        header.classList.add('bg-navy', 'bg-opacity-95', 'shadow-lg', 'text-white');
+                        header.classList.remove('bg-transparent', 'text-white');
+                        navLinks.forEach(link => link.classList.remove('border-transparent'));
+                    } else if (window.scrollY === 0) { // At the top
+                        header.classList.add('bg-transparent', 'text-white');
+                        header.classList.remove('bg-navy', 'bg-opacity-95', 'shadow-lg');
+                        navLinks.forEach(link => link.classList.remove('border-transparent'));
+                    }
+                }
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('translate-x-full');
+            });
+
+            closeMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+            
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    // Close the menu on link click and navigate smoothly
+                    mobileMenu.classList.add('translate-x-full');
+                    const targetId = link.getAttribute('href').substring(1);
+                    document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            // --- 3. Hero Section Cinematic Fade-In ---
+            gsap.timeline()
+                .to('#hero-image', { scale: 1.1, duration: 8, ease: "power1.out" }) // Subtle Zoom
+                .to('#hero-subtitle', { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" }, 0.5)
+                .to('#hero-title', { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" }, 1)
+                .to('#hero-cta', { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" }, 1.5);
+            
+            // Hero Parallax Effect (on scroll)
+            gsap.to('#hero-image', {
+                y: 100, // Move image down slightly as we scroll down
+                ease: "none",
+                scrollTrigger: {
+                    trigger: '#home',
+                    start: 'top top',
+                    scrub: 0.5,
+                }
+            });
+
+
+            // --- 4. Scroll Reveal Animations (Expert-Level) ---
+
+            // General function for section title reveals
+            const revealSectionTitle = (selector) => {
+                gsap.from(selector, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1.2,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: selector,
+                        start: "top 85%", // Start animation when 85% of element is visible
+                        toggleActions: "play none none reverse",
+                    }
+                });
+            };
+
+            // About Section Content Fade/Slide
+            revealSectionTitle('.about-content h2');
+            gsap.from('.about-content p, .about-content ul', {
+                y: 30,
+                opacity: 0,
+                stagger: 0.4,
+                duration: 1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: '#about',
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
+                }
+            });
+
+            // About Section Cards (Staggered Fade-In)
+            gsap.from('.card-item', {
+                x: 50,
+                opacity: 0,
+                stagger: 0.2,
+                duration: 1.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: '.about-cards',
+                    start: "top 80%",
+                    toggleActions: "play none none reverse",
+                }
+            });
+
+            // Rooms Section Reveals
+            revealSectionTitle('.room-title');
+            gsap.utils.toArray('.room-card').forEach((card, i) => {
+                gsap.from(card, {
+                    opacity: 0,
+                    x: i % 2 === 0 ? -100 : 100, // Slide left for even, right for odd
+                    duration: 1.5,
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 80%",
+                        toggleActions: "play none none reverse",
+                    }
+                });
+            });
+
+            // Gallery Section Reveals (Staggered Fade-In)
+            revealSectionTitle('.gallery-title');
+            gsap.from('.gallery-item', {
+                opacity: 0,
+                scale: 0.8,
+                stagger: 0.1,
+                duration: 0.8,
+                ease: "back.out(1.7)",
+                scrollTrigger: {
+                    trigger: '#gallery',
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
+                }
+            });
+
+            // Blog Section Reveals
+            revealSectionTitle('.blog-title');
+            gsap.from('.blog-card', {
+                opacity: 0,
+                y: 50,
+                stagger: 0.3,
+                duration: 1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: '#blog',
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
+                }
+            });
+            
+            // Contact Section Reveals
+            revealSectionTitle('.contact-title');
+            gsap.from('.contact-info, .map-container', {
+                opacity: 0,
+                y: 50,
+                stagger: 0.5,
+                duration: 1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: '#contact',
+                    start: "top 70%",
+                    toggleActions: "play none none reverse",
+                }
+            });
+            
+        });
+    </script>
+</body>
+</html>
